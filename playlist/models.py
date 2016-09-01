@@ -36,7 +36,8 @@ class Song(models.Model):
         ('FF', '131-inf.'),
     )
 
-    RATING = ((num, num) for num in range(1,6))
+    MOOD = ((num, num) for num in range(1,6))
+    ENERGY = ((num, num) for num in range(1,6))
 
     song_id = models.CharField(max_length=15, unique=True)
     # cover = models.CharField(max_length=15) # same as song_id :?
@@ -44,8 +45,8 @@ class Song(models.Model):
     artist_2 = models.ForeignKey('playlist.Artist', related_name='artist2', blank=True)
     title = models.CharField(max_length=50)
     soundcode = models.ManyToManyField(Soundcode)
-    mood = models.IntegerField(choices=RATING, default=5)
-    energy = models.IntegerField(choices=RATING, default=5)
+    mood = models.IntegerField(choices=MOOD, default=1)
+    energy = models.IntegerField(choices=ENERGY, default=1)
     tempo = models.CharField(max_length=2, choices=TEMPO_LIST, default='SS')
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
