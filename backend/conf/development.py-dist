@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+#
+# Copyright (c) Wojciech Dudek <wdudek82@gmail.com>
+
+
+# Production settings
+import os
+from jukebox.settings import BASE_DIR
+
+
+DEBUG = True
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'postgres': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+        'TEST_NAME': '',
+    },
+}
