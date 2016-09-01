@@ -1,2 +1,2 @@
 # jukebox
-Backend for jukebox with API
+Jukebox backend (with API)

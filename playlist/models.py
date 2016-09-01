@@ -39,6 +39,7 @@ class Song(models.Model):
     RATING = ((num, num) for num in range(1,6))
 
     song_id = models.CharField(max_length=15, unique=True)
+    # cover = models.CharField(max_length=15) # same as song_id :?
     artist_1 = models.ForeignKey('playlist.Artist', related_name='artist1')
     artist_2 = models.ForeignKey('playlist.Artist', related_name='artist2', blank=True)
     title = models.CharField(max_length=50)
