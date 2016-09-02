@@ -20,13 +20,13 @@ class Command(BaseCommand):
         for code in codes:
             code = code.split(';')
             symbol = code[0]
-            title = code[1]
+            genre = code[1]
 
-            if (symbol and len(symbol) == 1) and title:
-                soundcode, created = Soundcode.objects.get_or_create(title=title, symbol=symbol)
+            if (symbol and len(symbol) == 1) and genre:
+                soundcode, created = Soundcode.objects.get_or_create(genre=genre, symbol=symbol)
 
                 soundcode.save()
-                print('[ {} ] {}: {}'.format(created, symbol, title))
+                print('[ {} ] {}: {}'.format(created, symbol, genre))
                 imported += 1 if created else 0
 
         print('Imported codes: {} of {}'.format(imported, code_count))
