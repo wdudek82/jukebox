@@ -1,32 +1,34 @@
-import os
+import csv
+from collections import namedtuple
 
-from jukebox.settings import BASE_DIR
+from django.core.management.base import BaseCommand, CommandError
 from playlist.models import Soundcode
 
 
-from django.core.management.base import BaseCommand, CommandError
-
 
 class Command(BaseCommand):
-    help = 'Imports playlists from *.csv files to database'
+    help = 'Imports soundcodes from csv files to database'
+
+    def add_arguments(selfself, parser):
+        parser.add_argument('csv_file', type=str)
 
     def handle(self, *args, **options):
-        path = os.path.join(BASE_DIR, 'data', 'soundcodes.csv')
-        with open(path, 'r') as f:
-            codes = f.readlines()
+        CLIc = namedtuple('CLIc', ['close', 'red', 'green'])
+        msg = CLIc('\033[0m', '\033[0;31m', '\033[0;32m')
 
-        imported = 0
-        code_count = len(codes)
-        for code in codes:
-            code = code.split(';')
-            symbol = code[0]
-            genre = code[1]
+        with open(options['csv_file'], newline='') as f:
+            csv_data = csv.reader(f, delimiter=';')
 
-            if (symbol and len(symbol) == 1) and genre:
-                soundcode, created = Soundcode.objects.get_or_create(genre=genre, symbol=symbol)
+            count = 1
+            for row in csv_data:
+                symbol = row[0]
+                genre = row[1]
 
-                soundcode.save()
-                print('[ {} ] {}: {}'.format(created, symbol, genre))
-                imported += 1 if created else 0
+                soundcode, created = Soundcode.objects.get_or_create(
+                    symbol=symbol,
+                    genre=genre
+                )
 
-        print('Imported codes: {} of {}'.format(imported, code_count))
+                created = '{}{}{}'.format(msg[2 if created else 1], created, msg[0])
+                print('[{:03}][{}] {} -> {}'.format(count, created, symbol, genre))
+                count += 1

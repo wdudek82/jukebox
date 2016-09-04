@@ -60,7 +60,7 @@ class Song(models.Model):
     song_id = models.CharField(max_length=15, unique=True)
     song_url = models.CharField(max_length=500)
     artist_1 = models.ForeignKey('playlist.Artist', related_name='artist1')
-    artist_2 = models.ForeignKey('playlist.Artist', related_name='artist2', blank=True)
+    artist_2 = models.ForeignKey('playlist.Artist', related_name='artist2', null=True, blank=True)
     song_title = models.CharField(max_length=50)
     album = models.ForeignKey('playlist.Album')
     soundcode = models.ManyToManyField(Soundcode)
