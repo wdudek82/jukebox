@@ -18,7 +18,6 @@ class Artist(models.Model):
     class Meta:
         verbose_name = 'Artist'
         verbose_name_plural = 'Artists'
-        ordering = ('id',)
 
 
 class Album(models.Model):

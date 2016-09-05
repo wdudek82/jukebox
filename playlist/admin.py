@@ -5,7 +5,7 @@ from .models import Artist, Album, Soundcode, Song
 
 class ArtistAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'created_at', 'updated_at')
-    list_display_links = ('name', 'created_at', 'updated_at')
+    list_display_links = ('name',)
     search_fields = ('name', 'created_at', 'updated_at')
 
 
