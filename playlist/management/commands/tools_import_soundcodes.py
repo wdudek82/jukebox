@@ -5,16 +5,15 @@ from django.core.management.base import BaseCommand, CommandError
 from playlist.models import Soundcode
 
 
-
 class Command(BaseCommand):
     help = 'Imports soundcodes from csv files to database'
 
-    def add_arguments(selfself, parser):
+    def add_arguments(self, parser):
         parser.add_argument('csv_file', type=str)
 
     def handle(self, *args, **options):
-        CLIc = namedtuple('CLIc', ['close', 'red', 'green'])
-        msg = CLIc('\033[0m', '\033[0;31m', '\033[0;32m')
+        cli_c = namedtuple('CLIc', ['close', 'red', 'green'])
+        msg = cli_c('\033[0m', '\033[0;31m', '\033[0;32m')
 
         with open(options['csv_file'], newline='') as f:
             csv_data = csv.reader(f, delimiter=';')
@@ -22,7 +21,7 @@ class Command(BaseCommand):
             count = 1
             for row in csv_data:
                 symbol = row[0]
-                genre = row[1]
+                genre = row[1].title()
 
                 soundcode, created = Soundcode.objects.get_or_create(
                     symbol=symbol,
