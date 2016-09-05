@@ -133,6 +133,8 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'backend', 'media')
 
+# Grappelli Config
+GRAPPELLI_ADMIN_TITLE = 'Szafa Grająca IMS'
 
 # Custom settings
 from config import *
