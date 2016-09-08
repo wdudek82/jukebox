@@ -46,7 +46,7 @@ class Soundcode(models.Model):
     symbol = models.CharField(max_length=1, unique=True)
 
     def __str__(self):
-        return self.genre
+        return self.symbol
 
     class Meta:
         verbose_name = 'Soundcode'

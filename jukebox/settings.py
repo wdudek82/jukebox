@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'playlist',
     'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -102,6 +103,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# rest_framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    # 'PAGE_SIZE': 10,
+}
 
 
 # Internationalization
