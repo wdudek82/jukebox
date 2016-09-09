@@ -30,7 +30,7 @@ class Command(BaseCommand):
             album, created = Album.objects.get_or_create(
                 # When albums will be added to import data: .title()
                 album_title=album,
-                cover=os.path.join('covers', cover_fname)
+                image=os.path.join('covers', cover_fname)
             )
             return album
 

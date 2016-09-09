@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^soundcode/$', views.SoundcodeList.as_view()),
     url(r'^soundcode/(?P<pk>\d+)/$', views.SoundcodeDetail.as_view()),
 
+    # url(r'^song/$', views.SongList.as_view()),
     url(r'^song/$', views.SongList.as_view()),
     url(r'^song/(?P<pk>\d+)/$', views.SongDetail.as_view()),
 ]
