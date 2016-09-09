@@ -18,3 +18,4 @@ backend/conf/development.py
 backend/conf/production.py
 
 *.sqlite3
+/config.py
