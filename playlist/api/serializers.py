@@ -27,5 +27,6 @@ class SongSerializer(serializers.ModelSerializer):
         model = Song
         depth = 0
         fields = ('id', 'song_id', 'song_url', 'image', 'song_title', 'album', 'artist_1', 'artist_2',
-                  'soundcode', 'mood', 'energy', 'tempo', 'created_at', 'updated_at')
+                  'soundcode', 'related_tracks', 'related_artists', 'mood', 'energy', 'tempo',
+                  'created_at', 'updated_at')
 

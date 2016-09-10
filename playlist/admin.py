@@ -43,13 +43,14 @@ class SoundcodeAdmin(admin.ModelAdmin):
 
 class SongAdmin(admin.ModelAdmin):
     list_display = ('id', 'song_id', 'song_url', 'get_image', 'artist_1', 'artist_2', 'song_title', 'album',
-                    'get_album_cover', 'get_soundcodes', 'mood', 'energy', 'tempo', 'created_at', 'updated_at')
+                    'get_album_cover', 'get_soundcodes', 'mood', 'energy', 'tempo', 'get_related_artists',
+                    'get_related_tracks', 'created_at', 'updated_at')
     list_display_links = ('song_id',)
     list_filter = ('artist_1', 'artist_2', 'song_title', 'album', 'mood',
                    'energy', 'tempo', 'created_at', 'updated_at')
     search_fields = ('id', 'song_id', 'song_url', 'artist_1', 'artist_2', 'song_title',
                      'album', 'mood', 'energy', 'tempo', 'created_at', 'updated_at')
-    filter_horizontal = ('soundcode',)
+    filter_horizontal = ('soundcode', 'related_artists', 'related_tracks')
 
     def get_image(self, instance):
         image = instance.image
@@ -65,9 +66,19 @@ class SongAdmin(admin.ModelAdmin):
     get_album_cover.short_description = 'Album Cover'
     get_album_cover.allow_tags = True
 
-    @staticmethod
-    def get_soundcodes(instance):
+    def get_soundcodes(self, instance):
         return ', '.join([code.genre for code in instance.soundcode.all()])
+    get_soundcodes.short_description = 'Genre'
+
+    def get_related_artists(self, instance):
+        artists = ', '.join([artist.name for artist in instance.related_artists.all()])
+        return artists if artists else '-'
+    get_related_artists.short_description = 'Related Artists'
+
+    def get_related_tracks(self, instance):
+        tracks = ', '.join([song.song_title for song in instance.related_tracks.all()])
+        return tracks if tracks else '-'
+    get_related_tracks.short_description = 'Related Tracks'
 
 
 admin.site.register(Artist, ArtistAdmin)
