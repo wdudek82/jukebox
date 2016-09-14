@@ -1,5 +1,6 @@
+import os
+from django.conf import settings
 from django.contrib import admin
-
 from .models import Artist, Album, Soundcode, Song
 
 
@@ -20,14 +21,16 @@ class AlbumAdmin(admin.ModelAdmin):
     list_display = ('id', 'album_title', 'get_image', 'created_at', 'updated_at')
     list_display_links = ('album_title',)
     list_filter = ('album_title', 'created_at', 'updated_at')
-    search_fields = ('album_title', 'cover_tag', 'created_at', 'updated_at')
+    search_fields = ('album_title', 'created_at', 'updated_at')
 
     def get_image(self, instance):
         image = instance.image
+        img_on_disk = os.path.exists(os.path.join(settings.MEDIA_ROOT, str(image)))
         return '<a href="{0}" target="_blank"><img src="{0}" width="200"</a>'.format(
-            image.url) if image else '-'
+            image.url) if image and img_on_disk else '-'
     get_image.short_description = 'Image'
     get_image.allow_tags = True
+    get_image.admin_order_field = 'image'
 
 
 class SoundcodeAdmin(admin.ModelAdmin):

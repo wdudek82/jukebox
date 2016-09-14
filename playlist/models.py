@@ -1,5 +1,6 @@
 import os
 from django.db import models
+from django.conf import settings
 
 
 def upload_to(instance, filename):
@@ -12,12 +13,12 @@ class Artist(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = 'Artist'
         verbose_name_plural = 'Artists'
+
+    def __str__(self):
+        return self.name
 
 
 class Album(models.Model):
@@ -26,13 +27,13 @@ class Album(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
-    def __str__(self):
-        return self.album_title
-
     class Meta:
         verbose_name = 'Album'
         verbose_name_plural = 'Albums'
         ordering = ('album_title',)
+
+    def __str__(self):
+        return self.album_title
 
 
 class Soundcode(models.Model):
@@ -42,13 +43,13 @@ class Soundcode(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.symbol
-
     class Meta:
         verbose_name = 'Soundcode'
         verbose_name_plural = 'Soundcodes'
         ordering = ('genre',)
+
+    def __str__(self):
+        return self.symbol
 
 
 class Song(models.Model):
@@ -85,9 +86,10 @@ class Song(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
-    def __str__(self):
-        return self.song_id
-
     class Meta:
         verbose_name = 'Song'
         verbose_name_plural = 'Songs'
+
+    def __str__(self):
+        return self.song_id
+
