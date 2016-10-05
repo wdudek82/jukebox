@@ -32,17 +32,17 @@ class Mixins:
             valid = cls.validate_timestamp(created)
             if valid:
                 queryset = queryset.filter(
-                    created_at__year=valid[0],
-                    created_at__month=valid[1],
-                    created_at__day=valid[2],
+                    created_at__year__gte=valid[0],
+                    created_at__month__gte=valid[1],
+                    created_at__day__gte=valid[2],
                 )
         if updated:
             valid = cls.validate_timestamp(updated)
             if valid:
                 queryset = queryset.filter(
-                    updated_at__year=valid[0],
-                    updated_at__month=valid[1],
-                    updated_at__day=valid[2],
+                    updated_at__year__gte=valid[0],
+                    updated_at__month__gte=valid[1],
+                    updated_at__day__gte=valid[2],
                 )
         return queryset
 
