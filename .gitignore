@@ -20,3 +20,7 @@ backend/conf/production.py
 *.sqlite3
 /config.py
 /node_modules/
+/playlist/management/commands/tools_import_playlist.py
+/playlist/management/commands/tools_import_track_genres.py
+/playlist/management/commands/tools_import_track_categories.py
+/playlist/management/commands/tools_import_albums_names.py

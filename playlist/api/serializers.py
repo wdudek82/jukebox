@@ -1,31 +1,32 @@
 from rest_framework import serializers
-from playlist.models import Album, Artist, Soundcode, Song
-
-
-class AlbumSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Album
-        fields = ('id', 'album_title', 'image', 'created_at', 'updated_at')
+from playlist.models import Artist, Category, Genre, Track
 
 
 class ArtistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artist
-        fields = ('id', 'name', 'image', 'created_at', 'updated_at')
+        fields = ('id', 'name', 'created_at', 'updated_at')
 
 
-class SoundcodeSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Soundcode
-        fields = ('id', 'symbol', 'genre', 'image', 'created_at', 'updated_at')
+        model = Category
+        fields = ('id', 'category_name', 'category_code')
 
 
-class SongSerializer(serializers.ModelSerializer):
-    soundcode = serializers.StringRelatedField(many=True)
+class GenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Genre
+        fields = ('id', 'genre_name', 'genre_code', 'created_at', 'updated_at')
+
+
+class TrackSerializer(serializers.ModelSerializer):
+    artists = serializers.StringRelatedField(many=True)
+    category = serializers.StringRelatedField(many=False)
+    genres = serializers.StringRelatedField(many=True)
 
     class Meta:
-        model = Song
-        fields = ('id', 'song_id', 'song_url', 'image', 'song_title', 'album', 'artist_1', 'artist_2',
-                  'soundcode', 'related_tracks', 'related_artists', 'mood', 'energy', 'tempo',
-                  'created_at', 'updated_at')
+        model = Track
+        fields = ('id', 'song_id', 'category', 'song_url', 'image', 'song_title', 'artists',
+                  'genres', 'related_tracks', 'mood', 'energy', 'tempo', 'created_at', 'updated_at')
 

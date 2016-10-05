@@ -1,14 +1,14 @@
 from rest_framework import generics
 
-from playlist.api.serializers import AlbumSerializer, ArtistSerializer, SoundcodeSerializer, SongSerializer
-from playlist.models import Album, Artist, Soundcode, Song
+from playlist.models import Artist, Category, Genre, Track
+from playlist.api.serializers import (ArtistSerializer, CategorySerializer,
+                                              GenreSerializer, TrackSerializer)
 
 
 class Mixins:
     @classmethod
     def validate_timestamp(cls, timestamp):
         try:
-            # datetime.strptime(timestamp[:11], '%YYYY-%mm-%dd')
             timestamp = timestamp.split('-')
             length = len(timestamp) == 3
             year_len = len(timestamp[0]) == 4
@@ -23,9 +23,8 @@ class Mixins:
                 int(timestamp[2]),
             )
             return timestamp if valid else None
-        # TODO: !!!
         except:
-            return False
+            return None
 
     @classmethod
     def custom_query(cls, queryset, created, updated):
@@ -48,20 +47,20 @@ class Mixins:
         return queryset
 
 
-class AlbumList(generics.ListCreateAPIView, Mixins):
-    queryset = Album.objects.all()
-    serializer_class = AlbumSerializer
+class CategoryList(generics.ListCreateAPIView, Mixins):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
     def get_queryset(self):
-        queryset = Album.objects.all()
+        queryset = Category.objects.all()
         created = self.request.query_params.get('created')
         updated = self.request.query_params.get('updated')
         return self.custom_query(queryset, created, updated)
 
 
-class AlbumDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Album.objects.all()
-    serializer_class = AlbumSerializer
+class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
 class ArtistList(generics.ListCreateAPIView, Mixins):
@@ -80,31 +79,31 @@ class ArtistDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ArtistSerializer
 
 
-class SoundcodeList(generics.ListCreateAPIView, Mixins):
-    serializer_class = SoundcodeSerializer
+class GenreList(generics.ListCreateAPIView, Mixins):
+    serializer_class = GenreSerializer
 
     def get_queryset(self):
-        queryset = Soundcode.objects.all()
+        queryset = Genre.objects.all()
         created = self.request.query_params.get('created')
         updated = self.request.query_params.get('updated')
         return self.custom_query(queryset, created, updated)
 
 
-class SoundcodeDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Soundcode.objects.all()
-    serializer_class = SoundcodeSerializer
+class GenreDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
 
 
-class SongList(generics.ListCreateAPIView, Mixins):
-    serializer_class = SongSerializer
+class TrackList(generics.ListCreateAPIView, Mixins):
+    serializer_class = TrackSerializer
 
     def get_queryset(self):
-        queryset = Song.objects.all()
+        queryset = Track.objects.all()
         created = self.request.query_params.get('created')
         updated = self.request.query_params.get('updated')
         return self.custom_query(queryset, created, updated)
 
 
-class SongDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Song.objects.all()
-    serializer_class = SongSerializer
+class TrackDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Track.objects.all()
+    serializer_class = TrackSerializer

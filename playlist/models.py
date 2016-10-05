@@ -1,15 +1,32 @@
+# -*- coding: utf-8 -*-
 import os
+
 from django.db import models
-from django.conf import settings
 
 
 def upload_to(instance, filename):
     return os.path.join('covers', filename)
 
 
+class Album(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    description = models.TextField(null=True, blank=True)
+    cover_image = models.ImageField(upload_to=upload_to, null=True, blank=True)
+    published_at = models.CharField(max_length=10, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Album'
+        verbose_name_plural = 'Albums'
+        ordering = ('title',)
+
+    def __str__(self):
+        return str(self.title)
+
+
 class Artist(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
@@ -18,41 +35,38 @@ class Artist(models.Model):
         verbose_name_plural = 'Artists'
 
     def __str__(self):
-        return self.name
+        return self.name.encode('utf8')
 
 
-class Album(models.Model):
-    album_title = models.CharField(max_length=50)  # Add unique after albums addition to import data
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+class Category(models.Model):
+    category_name = models.CharField(max_length=30, default='default')
+    category_code = models.CharField(max_length=1, unique=True)
 
     class Meta:
-        verbose_name = 'Album'
-        verbose_name_plural = 'Albums'
-        ordering = ('album_title',)
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+        ordering = ('category_name',)
 
     def __str__(self):
-        return self.album_title
+        return self.category_code
 
 
-class Soundcode(models.Model):
-    genre = models.CharField(max_length=30, unique=True)
-    symbol = models.CharField(max_length=1, unique=True)
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True)
+class Genre(models.Model):
+    genre_name = models.CharField(max_length=30, unique=True)
+    genre_code = models.CharField(max_length=1, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'Soundcode'
-        verbose_name_plural = 'Soundcodes'
-        ordering = ('genre',)
+        verbose_name = 'Genre'
+        verbose_name_plural = 'Genres'
+        ordering = ('genre_name',)
 
     def __str__(self):
-        return self.symbol
+        return self.genre_code
 
 
-class Song(models.Model):
+class Track(models.Model):
     TEMPO_LIST = (
         ('SS', 'ad lib-60'),
         ('SM', '61-81'),
@@ -71,25 +85,23 @@ class Song(models.Model):
     ENERGY = ((num, num) for num in range(1, 6))
 
     song_id = models.CharField(max_length=15, unique=True)
-    song_url = models.CharField(max_length=500)
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True)
-    song_title = models.CharField(max_length=50)
-    album = models.ForeignKey('playlist.Album')
-    artist_1 = models.ForeignKey('playlist.Artist', related_name='artist1')
-    artist_2 = models.ForeignKey('playlist.Artist', related_name='artist2', null=True, blank=True)
-    soundcode = models.ManyToManyField(Soundcode)
+    category = models.ForeignKey('Category')
+    album = models.ForeignKey('Album')
+    title = models.CharField(max_length=50)
+    artists = models.ManyToManyField('Artist', related_name='artists')
+    genres = models.ManyToManyField(Genre)
     mood = models.IntegerField(choices=MOOD, default=1)
     energy = models.IntegerField(choices=ENERGY, default=1)
     tempo = models.CharField(max_length=2, choices=TEMPO_LIST, default='SS')
-    related_artists = models.ManyToManyField('playlist.Artist')
-    related_tracks = models.ManyToManyField('playlist.Song')
+    related_artists = models.ManyToManyField('Artist', blank=True, related_name='related_artists')
+    related_tracks = models.ManyToManyField('Track', blank=True)
+    file = models.CharField(max_length=500)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     class Meta:
-        verbose_name = 'Song'
-        verbose_name_plural = 'Songs'
+        verbose_name = 'Track'
+        verbose_name_plural = 'Tracks'
 
     def __str__(self):
         return self.song_id
-
