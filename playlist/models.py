@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 
 from django.db import models
@@ -35,7 +34,7 @@ class Artist(models.Model):
         verbose_name_plural = 'Artists'
 
     def __str__(self):
-        return self.name.encode('utf8')
+        return str(self.name)
 
 
 class Category(models.Model):

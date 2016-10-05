@@ -1,8 +1,8 @@
 from rest_framework import generics
 
-from playlist.models import Artist, Category, Genre, Track
-from playlist.api.serializers import (ArtistSerializer, CategorySerializer,
-                                              GenreSerializer, TrackSerializer)
+from playlist.models import Album, Artist, Category, Genre, Track
+from playlist.api.serializers import (AlbumSerializer, ArtistSerializer, CategorySerializer,
+                                      GenreSerializer, TrackSerializer)
 
 
 class Mixins:
@@ -48,7 +48,6 @@ class Mixins:
 
 
 class CategoryList(generics.ListCreateAPIView, Mixins):
-    queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
     def get_queryset(self):
@@ -63,8 +62,17 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CategorySerializer
 
 
+class AlbumList(generics.ListCreateAPIView, Mixins):
+    serializer_class = AlbumSerializer
+
+    def get_queryset(self):
+        queryset = Album.objects.all()
+        created = self.request.query_params.get('created')
+        updated = self.request.query_params.get('updated')
+        return self.custom_query(queryset, created, updated)
+
+
 class ArtistList(generics.ListCreateAPIView, Mixins):
-    queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
 
     def get_queryset(self):

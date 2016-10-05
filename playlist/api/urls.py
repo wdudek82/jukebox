@@ -3,6 +3,9 @@ from playlist.api import views
 
 
 urlpatterns = [
+    url(r'^album/list/$', views.AlbumList.as_view()),
+    url(r'^album/(?P<pk>\d+)/$', views.AlbumList.as_view()),
+
     url(r'^artist/list/$', views.ArtistList.as_view()),
     url(r'^artist/(?P<pk>\d+)/$', views.ArtistDetail.as_view()),
 

@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from playlist.models import Artist, Category, Genre, Track
+from playlist.models import Album, Artist, Category, Genre, Track
+
+
+class AlbumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Album
+        fields = ('id', 'title', 'published_at', 'created_at', 'updated_at')
 
 
 class ArtistSerializer(serializers.ModelSerializer):
@@ -21,12 +27,13 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class TrackSerializer(serializers.ModelSerializer):
+    album = serializers.StringRelatedField(many=False)
     artists = serializers.StringRelatedField(many=True)
     category = serializers.StringRelatedField(many=False)
     genres = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Track
-        fields = ('id', 'song_id', 'category', 'song_url', 'image', 'song_title', 'artists',
-                  'genres', 'related_tracks', 'mood', 'energy', 'tempo', 'created_at', 'updated_at')
+        fields = ('id', 'song_id', 'category', 'title', 'artists', 'album', 'genres', 'related_tracks',
+                  'mood', 'energy', 'tempo', 'file', 'created_at', 'updated_at')
 

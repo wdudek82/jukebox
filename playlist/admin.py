@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 from django.contrib import admin
 from .models import Album, Artist, Category, Genre, Track
