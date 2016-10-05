@@ -24,3 +24,4 @@ backend/conf/production.py
 /playlist/management/commands/tools_import_track_genres.py
 /playlist/management/commands/tools_import_track_categories.py
 /playlist/management/commands/tools_import_albums_names.py
+/var/log/import_playlist__error.txt
