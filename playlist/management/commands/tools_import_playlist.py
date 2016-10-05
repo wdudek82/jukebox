@@ -82,9 +82,12 @@ class Command(BaseCommand):
                     add_soundcodes(song, soundcodes)
 
                 s_created = '{}{}{}'.format(msg[2 if s_created else 1], s_created, msg[0])
-                print('[{0:05}][ {1} ] {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}'.format(
-                    count, s_created, song_id, song_url, artist_1, artist_2, song_title.title(),
-                    album.album_title, soundcodes, mood, energy, tempo
-                    )
-                )
+                # print('[{0:05}][ {1} ] {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}'.format(
+                #     count, s_created, song_id, song_url, artist_1, artist_2, song_title.title(),
+                #     album.album_title, soundcodes, mood, energy, tempo
+                #     )
+                # )
+                import pprint
+
+                pprint.pprint(song.__dict__)
                 count += 1

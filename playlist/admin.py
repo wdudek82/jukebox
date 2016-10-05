@@ -57,17 +57,17 @@ class SongAdmin(admin.ModelAdmin):
 
     def get_image(self, instance):
         image = instance.image
-        return '<a href="{0}" target="_blank"><img src="{0}" width="200"</a>'.format(
-            image.url) if image else '-'
+        return '<a href="{0}" target="_blank"><img src="{0}" width="200"</a>'.format(image.url) if image else '-'
     get_image.short_description = 'Image'
     get_image.allow_tags = True
 
     def get_album_cover(self, instance):
         image = instance.album.image
-        return '<a href="{0}" target="_blank"><img src="{0}" width="200"</a>'.format(
-            image.url) if image else '-'
+        return '<a href="{0}" target="_blank"><img src="{0}" width="200"</a>'.format(image.url) if image else '-'
     get_album_cover.short_description = 'Album Cover'
     get_album_cover.allow_tags = True
+
+    # def join_codes():
 
     def get_soundcodes(self, instance):
         return ', '.join([code.genre for code in instance.soundcode.all()])

@@ -1,14 +1,14 @@
 from rest_framework import generics
 
+from playlist.api.serializers import AlbumSerializer, ArtistSerializer, SoundcodeSerializer, SongSerializer
 from playlist.models import Album, Artist, Soundcode, Song
-from playlist.api.serializers import (AlbumSerializer, ArtistSerializer,
-                                      SoundcodeSerializer, SongSerializer)
 
 
 class Mixins:
     @classmethod
     def validate_timestamp(cls, timestamp):
         try:
+            # datetime.strptime(timestamp[:11], '%YYYY-%mm-%dd')
             timestamp = timestamp.split('-')
             length = len(timestamp) == 3
             year_len = len(timestamp[0]) == 4
@@ -23,8 +23,9 @@ class Mixins:
                 int(timestamp[2]),
             )
             return timestamp if valid else None
+        # TODO: !!!
         except:
-            return None
+            return False
 
     @classmethod
     def custom_query(cls, queryset, created, updated):
