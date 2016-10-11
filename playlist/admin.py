@@ -74,15 +74,13 @@ class TrackAdmin(admin.ModelAdmin):
             category=instance.category,
             tempo=instance.tempo) \
                 .exclude(id=instance.id) \
-                .values('song_id')
+                .values('id')
         results = (related_tracks.filter(mood=instance.mood, energy=instance.energy) or
                    related_tracks.filter(energy=instance.energy) or
                    related_tracks)
 
-        tracks = ', '.join(
-            [track['song_id'] for track in results]
-        )
-        return tracks or '-'
+        tracks = [track['id'] for track in results]
+        return tracks
     get_related_tracks.short_description = 'Related Tracks'
 
 

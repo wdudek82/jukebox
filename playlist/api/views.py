@@ -36,7 +36,7 @@ class Mixins:
                     created_at__month__gte=valid[1],
                     created_at__day__gte=valid[2],
                 )
-        if updated:
+        elif updated:
             valid = cls.validate_timestamp(updated)
             if valid:
                 queryset = queryset.filter(
@@ -44,6 +44,8 @@ class Mixins:
                     updated_at__month__gte=valid[1],
                     updated_at__day__gte=valid[2],
                 )
+        # if album_id:
+        #     queryset = queryset.filter(album_id=album_id)
         return queryset
 
 
@@ -107,6 +109,11 @@ class TrackList(generics.ListCreateAPIView, Mixins):
 
     def get_queryset(self):
         queryset = Track.objects.all()
+
+        album_id= self.request.query_params.get('album_id')
+        if album_id:
+            queryset = queryset.filter(album_id=album_id)
+
         created = self.request.query_params.get('created')
         updated = self.request.query_params.get('updated')
         return self.custom_query(queryset, created, updated)
