@@ -116,9 +116,13 @@ class TrackList(generics.ListCreateAPIView, Mixins):
     def get_queryset(self):
         queryset = Track.objects.all()
 
-        album_id= self.request.query_params.get('album_id')
+        album_id = self.request.query_params.get('album_id')
         if album_id:
             queryset = queryset.filter(album_id=album_id)
+
+        artist_id = self.request.query_params.get('artist_id')
+        if artist_id:
+            queryset = Track.objects.filter(artists__id=artist_id)
 
         created = self.request.query_params.get('created')
         updated = self.request.query_params.get('updated')
