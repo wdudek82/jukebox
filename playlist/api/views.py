@@ -1,3 +1,5 @@
+from django.db.models import Q
+
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework import generics
 

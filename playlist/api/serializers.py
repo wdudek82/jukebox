@@ -30,7 +30,8 @@ class GenreSerializer(serializers.ModelSerializer):
 class TrackSerializer(serializers.ModelSerializer):
     album = AlbumSerializer(many=False, read_only=True)
     # album_id = serializers.PrimaryKeyRelatedField(queryset=Album.objects.all())
-    artists = serializers.StringRelatedField(many=True)
+    # artists = serializers.StringRelatedField(many=True)
+    artists = ArtistSerializer(many=True, read_only=True)
     # category = serializers.StringRelatedField(many=False)
     category = CategorySerializer(many=False, read_only=True)
     # genres = serializers.StringRelatedField(many=True)
