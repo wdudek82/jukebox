@@ -28,16 +28,18 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class TrackSerializer(serializers.ModelSerializer):
-    album = serializers.StringRelatedField(many=False)
-    album_id = serializers.PrimaryKeyRelatedField(queryset=Album.objects.all())
+    album = AlbumSerializer(many=False, read_only=True)
+    # album_id = serializers.PrimaryKeyRelatedField(queryset=Album.objects.all())
     artists = serializers.StringRelatedField(many=True)
-    category = serializers.StringRelatedField(many=False)
-    genres = serializers.StringRelatedField(many=True)
+    # category = serializers.StringRelatedField(many=False)
+    category = CategorySerializer(many=False, read_only=True)
+    # genres = serializers.StringRelatedField(many=True)
+    genres = GenreSerializer(many=True, read_only=True)
     related_tracks = serializers.SerializerMethodField()
 
     class Meta:
         model = Track
-        fields = ('id', 'song_id', 'category', 'title', 'artists', 'album', 'album_id', 'genres', 'related_tracks',
+        fields = ('id', 'song_id', 'category', 'title', 'artists', 'album', 'genres', 'related_tracks', # 'album_id',
                   'mood', 'energy', 'tempo', 'file', 'created_at', 'updated_at')
 
     def get_related_tracks(self, instance):
