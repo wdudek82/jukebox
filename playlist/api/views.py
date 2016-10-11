@@ -1,3 +1,4 @@
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework import generics
 
 from playlist.models import Album, Artist, Category, Genre, Track
@@ -44,12 +45,11 @@ class Mixins:
                     updated_at__month__gte=valid[1],
                     updated_at__day__gte=valid[2],
                 )
-        # if album_id:
-        #     queryset = queryset.filter(album_id=album_id)
         return queryset
 
 
 class CategoryList(generics.ListCreateAPIView, Mixins):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = CategorySerializer
 
     def get_queryset(self):
@@ -60,11 +60,13 @@ class CategoryList(generics.ListCreateAPIView, Mixins):
 
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
 class AlbumList(generics.ListCreateAPIView, Mixins):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = AlbumSerializer
 
     def get_queryset(self):
@@ -75,6 +77,7 @@ class AlbumList(generics.ListCreateAPIView, Mixins):
 
 
 class ArtistList(generics.ListCreateAPIView, Mixins):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = ArtistSerializer
 
     def get_queryset(self):
@@ -85,11 +88,13 @@ class ArtistList(generics.ListCreateAPIView, Mixins):
 
 
 class ArtistDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
 
 
 class GenreList(generics.ListCreateAPIView, Mixins):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = GenreSerializer
 
     def get_queryset(self):
@@ -105,6 +110,7 @@ class GenreDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TrackList(generics.ListCreateAPIView, Mixins):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = TrackSerializer
 
     def get_queryset(self):
@@ -120,5 +126,7 @@ class TrackList(generics.ListCreateAPIView, Mixins):
 
 
 class TrackDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     queryset = Track.objects.all()
     serializer_class = TrackSerializer
+
