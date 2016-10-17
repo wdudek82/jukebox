@@ -1,3 +1,6 @@
+from datetime import datetime
+import pytz
+
 from django.db.models import Q
 
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
@@ -10,44 +13,16 @@ from playlist.api.serializers import (AlbumSerializer, ArtistSerializer, Categor
 
 class Mixins:
     @classmethod
-    def validate_timestamp(cls, timestamp):
+    def convert_timestamp(cls, timestamp):
         try:
-            timestamp = timestamp.split('-')
-            length = len(timestamp) == 3
-            year_len = len(timestamp[0]) == 4
-            month_len = len(timestamp[1]) == 1 or len(timestamp[1]) == 2
-            day_len = len(timestamp[2]) == 1 or len(timestamp[2]) == 2
+            timestamp = datetime.fromtimestamp(int(timestamp))
+            aware_timestamp = pytz.timezone('Europe/Warsaw').localize(timestamp)
 
-            valid = length and year_len and month_len and day_len
+        except ValueError as e:
+            print(e)
+            aware_timestamp = None
 
-            timestamp = (
-                int(timestamp[0]),
-                int(timestamp[1]),
-                int(timestamp[2]),
-            )
-            return timestamp if valid else None
-        except:
-            return None
-
-    @classmethod
-    def custom_query(cls, queryset, created, updated):
-        if created:
-            valid = cls.validate_timestamp(created)
-            if valid:
-                queryset = queryset.filter(
-                    created_at__year__gte=valid[0],
-                    created_at__month__gte=valid[1],
-                    created_at__day__gte=valid[2],
-                )
-        elif updated:
-            valid = cls.validate_timestamp(updated)
-            if valid:
-                queryset = queryset.filter(
-                    updated_at__year__gte=valid[0],
-                    updated_at__month__gte=valid[1],
-                    updated_at__day__gte=valid[2],
-                )
-        return queryset
+        return aware_timestamp
 
 
 class CategoryList(generics.ListCreateAPIView, Mixins):
@@ -57,8 +32,14 @@ class CategoryList(generics.ListCreateAPIView, Mixins):
     def get_queryset(self):
         queryset = Category.objects.all()
         created = self.request.query_params.get('created')
+        if created:
+            queryset = queryset.filter(created_at__gte=self.convert_timestamp(created))
+
         updated = self.request.query_params.get('updated')
-        return self.custom_query(queryset, created, updated)
+        if updated:
+            queryset = queryset.filter(updated_at__gte=self.convert_timestamp(updated))
+
+        return queryset
 
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -74,8 +55,14 @@ class AlbumList(generics.ListCreateAPIView, Mixins):
     def get_queryset(self):
         queryset = Album.objects.all()
         created = self.request.query_params.get('created')
+        if created:
+            queryset = queryset.filter(created_at__gte=self.convert_timestamp(created))
+
         updated = self.request.query_params.get('updated')
-        return self.custom_query(queryset, created, updated)
+        if updated:
+            queryset = queryset.filter(updated_at__gte=self.convert_timestamp(updated))
+
+        return queryset
 
 
 class ArtistList(generics.ListCreateAPIView, Mixins):
@@ -85,8 +72,14 @@ class ArtistList(generics.ListCreateAPIView, Mixins):
     def get_queryset(self):
         queryset = Artist.objects.all()
         created = self.request.query_params.get('created')
+        if created:
+            queryset = queryset.filter(created_at__gte=self.convert_timestamp(created))
+
         updated = self.request.query_params.get('updated')
-        return self.custom_query(queryset, created, updated)
+        if updated:
+            queryset = queryset.filter(updated_at__gte=self.convert_timestamp(updated))
+
+        return queryset
 
 
 class ArtistDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -102,8 +95,14 @@ class GenreList(generics.ListCreateAPIView, Mixins):
     def get_queryset(self):
         queryset = Genre.objects.all()
         created = self.request.query_params.get('created')
+        if created:
+            queryset = queryset.filter(created_at__gte=self.convert_timestamp(created))
+
         updated = self.request.query_params.get('updated')
-        return self.custom_query(queryset, created, updated)
+        if updated:
+            queryset = queryset.filter(updated_at__gte=self.convert_timestamp(updated))
+
+        return queryset
 
 
 class GenreDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -124,11 +123,17 @@ class TrackList(generics.ListCreateAPIView, Mixins):
 
         artist_id = self.request.query_params.get('artist_id')
         if artist_id:
-            queryset = Track.objects.filter(artists__id=artist_id)
+            queryset = queryset.filter(artists__id=artist_id)
 
         created = self.request.query_params.get('created')
+        if created:
+            queryset = queryset.filter(created_at__gte=self.convert_timestamp(created))
+
         updated = self.request.query_params.get('updated')
-        return self.custom_query(queryset, created, updated)
+        if updated:
+            queryset = queryset.filter(updated_at__gte=self.convert_timestamp(updated))
+
+        return queryset
 
 
 class TrackDetail(generics.RetrieveUpdateDestroyAPIView):
