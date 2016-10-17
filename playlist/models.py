@@ -94,7 +94,7 @@ class Track(models.Model):
     tempo = models.CharField(max_length=2, choices=TEMPO_LIST, default='SS')
     related_artists = models.ManyToManyField('Artist', blank=True, related_name='related_artists')
     related_tracks = models.ManyToManyField('Track', blank=True)
-    file = models.CharField(max_length=500)
+    file = models.CharField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
